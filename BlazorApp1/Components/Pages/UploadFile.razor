@@ -47,11 +47,23 @@
 
 
     // Dictionary of ReaderEvents that uses the Unique ID as a key
-    private Dictionary<string, List<ReaderEvent>> eventDictionary = new Dictionary<string, List<ReaderEvent>>();
+    public Dictionary<string, List<ReaderEvent>> eventDictionary = new Dictionary<string, List<ReaderEvent>>();
+    
+    public List<ReaderEvent> testEvents = new List<ReaderEvent>()
+    {
+
+        new ReaderEvent("This", "This", "This", "This", "This", "This"),
+        new ReaderEvent("is", "is", "is", "is", "is", "is"),
+        new ReaderEvent("a", "a", "a", "a", "a", "a"),
+        new ReaderEvent("test", "test", "test", "test", "test", "test"),
+        
+
+    };
 
     public async Task FileUploaded(InputFileChangeEventArgs e)
     {
         var browserFile = e.File;
+        FileName = browserFile.Name;
 
         if (browserFile != null)
         {
