@@ -52,13 +52,17 @@
     public List<ReaderEvent> testEvents = new List<ReaderEvent>()
     {
 
-        new ReaderEvent("This", "This", "This", "This", "This", "This"),
+        new ReaderEvent("Time", "Location", "Description", "HashID", "DevID", "Machine"),
         new ReaderEvent("is", "is", "is", "is", "is", "is"),
         new ReaderEvent("a", "a", "a", "a", "a", "a"),
+        new ReaderEvent("test", "test", "test", "test", "test", "test"),
+        new ReaderEvent("test", "test", "test", "test", "test", "test"),
         new ReaderEvent("test", "test", "test", "test", "test", "test"),
         
 
     };
+
+
 
     public async Task FileUploaded(InputFileChangeEventArgs e)
     {
@@ -70,20 +74,22 @@
 
             try
             {
+                
                 // Saving Uploaded file to disk
                 var fileStream = browserFile.OpenReadStream(long.MaxValue);
                 var destinationStream = new FileStream(FileName, FileMode.Create);
                 await fileStream.CopyToAsync(destinationStream);
                 destinationStream.Close();
 
+
                 // Create a stream reader that reads from the stream when a file is uploaded & make an eventList to keep track
-                var sr = new StreamReader(fileStream);
+                var sr = new StreamReader(FileName);
                 var eventList = new List<ReaderEvent>();
 
                 // Check every line of the stream in StreamReader
-                string line;
-                while((line = await sr.ReadLineAsync()) != null) // Until there is no remaining lines left
-                {
+                string? line = sr.ReadLine();
+                while((line = sr.ReadLine()) != null) // Until there is no remaining lines left
+                {   
 
                     // Break each line into an array with Reader Data
                     string[] data = line.Split(",");
@@ -98,13 +104,13 @@
                         data[5]
                     ));
 
-                    // Returns a dictionary with Readers and their Respective Events
-                    eventDictionary = OrganizeDictionData(eventList);
-
-                    // Close the file stream of the uploaded file
-                    fileStream.Close();
-
                 }
+
+                // Returns a dictionary with Readers and their Respective Events
+                eventDictionary = OrganizeDictionData(eventList);
+
+                // Close the file stream of the uploaded file
+                fileStream.Close();
 
             }
             catch (Exception exception)
