@@ -1,0 +1,57 @@
+﻿@page "/breakfast"
+@rendermode InteractiveServer
+
+<PageTitle>Breakfast</PageTitle>
+
+<h1>Breakfast</h1>
+
+<button class="btn btn-primary" @onclick="PourCoffee">Pour Coffee</button>
+<p role="status">@coffeeStatus</p>
+
+<button class="btn btn-primary" @onclick="FryEggs">Fry Eggs</button>
+
+<button class="btn btn-primary" @onclick="FryEggsAsync">Async Fry Eggs</button>
+<p role="status">@eggStatus</p>
+
+@code {
+
+    
+    internal class Egg { }
+
+    static string eggStatus = "";
+    string coffeeStatus = "";
+
+    private void PourCoffee()
+    {
+        coffeeStatus = $"Pouring coffee ({DateTime.Now})";
+    }
+
+    private async Task<Egg> FryEggs()
+    {
+        eggStatus = "";
+        eggStatus = $"cooking the eggs ... ({DateTime.Now})";
+        Task.Delay(3000).Wait();
+        eggStatus = $"cooking the eggs ... ({DateTime.Now})";
+        Task.Delay(3000).Wait();
+        eggStatus = $"Put eggs on plate ({DateTime.Now})";
+
+        return new Egg();
+
+    }
+    private async Task<Egg> FryEggsAsync()
+    {
+
+        eggStatus = $"Warming the egg pan... ({DateTime.Now})";
+        await Task.Delay(3000);
+        eggStatus = $"cracking eggs ({DateTime.Now})";
+        eggStatus = $"cooking the eggs ... ({DateTime.Now})";
+        await Task.Delay(3000);
+        eggStatus = $"Put eggs on plate ({DateTime.Now})";
+        this.StateHasChanged();
+
+        return new Egg();
+        
+    }
+
+    
+}
